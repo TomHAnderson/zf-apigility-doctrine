@@ -1,5 +1,6 @@
 <?php
-namespace Db;
+
+namespace ZFTest\Apigility\Db;
 
 use ZF\Apigility\Provider\ApigilityProviderInterface;
 

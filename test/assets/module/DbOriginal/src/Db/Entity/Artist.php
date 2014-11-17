@@ -1,6 +1,6 @@
 <?php
 
-namespace Db\Entity;
+namespace ZFTest\Apigility\Db\Entity;
 
 use \Doctrine\Common\Collections\ArrayCollection;
 
