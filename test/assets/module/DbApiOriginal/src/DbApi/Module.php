@@ -1,5 +1,5 @@
 <?php
-namespace DbApi;
+namespace ZFTest\Apigility\DbApi;
 
 use ZF\Apigility\Provider\ApigilityProviderInterface;
 

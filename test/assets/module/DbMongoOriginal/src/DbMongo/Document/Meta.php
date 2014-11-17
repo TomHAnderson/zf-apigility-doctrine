@@ -1,6 +1,6 @@
 <?php
 
-namespace DbMongo\Document;
+namespace ZFTest\Apigility\DbMongo\Document;
 
 class Meta
 {

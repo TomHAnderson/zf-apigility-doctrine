@@ -1,6 +1,6 @@
 <?php
 
-namespace General\Listener;
+namespace ZFTest\Apigility\General\Listener;
 
 use Zend\EventManager\Event;
 use Zend\EventManager\SharedEventManagerInterface;

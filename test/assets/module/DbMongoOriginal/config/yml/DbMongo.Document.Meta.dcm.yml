@@ -1,7 +1,7 @@
-DbMongo\Document\Meta:
+ZFTest\Apigility\DbMongo\Document\Meta:
   db: zf_apigility_doctrine_server_test
   collection: meta
-  repositoryClass: DbMongo\Repository\MetaRepository
+  repositoryClass: ZFTest\Apigility\DbMongo\Repository\MetaRepository
   fields:
     id:
       id: true
