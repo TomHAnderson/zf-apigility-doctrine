@@ -1,6 +1,6 @@
 <?php
 
-namespace ZFTest\Apigility\Db\Entity;
+namespace ZFTestApigilityDb\Entity;
 
 class Album
 {

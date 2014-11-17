@@ -1,6 +1,6 @@
 <?php
 
-namespace ZFTest\Apigility\DbMongo\Repository;
+namespace ZFTestApigilityDbMongo\Repository;
 
 use Doctrine\ODM\MongoDB\DocumentRepository;
 

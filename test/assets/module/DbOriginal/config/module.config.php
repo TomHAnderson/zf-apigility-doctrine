@@ -1,6 +1,6 @@
 <?php
 
-namespace ZFTest\Apigility\Db;
+namespace ZFTestApigilityDb;
 
 return [
     'doctrine' => [

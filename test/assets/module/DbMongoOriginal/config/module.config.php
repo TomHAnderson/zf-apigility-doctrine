@@ -1,6 +1,6 @@
 <?php
 
-namespace ZFTest\Apigility\DbMongo;
+namespace ZFTestApigilityDbMongo;
 
 return [
     'doctrine' => [
