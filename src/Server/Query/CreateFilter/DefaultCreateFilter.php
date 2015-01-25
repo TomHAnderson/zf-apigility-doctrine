@@ -50,4 +50,24 @@ class DefaultCreateFilter implements ObjectManagerAwareInterface, QueryCreateFil
     {
         return $data;
     }
+
+    /**
+     * Validate an OAuth2 request
+     *
+     * @param scope
+     * @return ApiProblem | bool
+     */
+    public function validateOAuth2($scope = null)
+    {
+        $server = $this->getServiceLocator()->getServiceLocator()->get('ZF\OAuth2\Service\OAuth2Server');
+        if ( ! $server->verifyResourceRequest(OAuth2Request::createFromGlobals(), $response = null, $scope = $scope)) {
+            $error = $server->getResponse();
+            $parameters = $error->getParameters();
+            $detail = isset($parameters['error_description']) ? $parameters['error_description']: $error->getStatusText();
+
+            return new ApiProblem($error->getStatusCode(), $detail);
+        }
+
+        return true;
+    }
 }
