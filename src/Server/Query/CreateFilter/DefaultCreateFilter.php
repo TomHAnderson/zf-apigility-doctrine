@@ -7,14 +7,44 @@ use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use ZF\ApiProblem\ApiProblem;
 use ZF\Rest\ResourceEvent;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class DefaultCreateFilter
  *
  * @package ZF\Apigility\Doctrine\Server\Query\CreateFilter
  */
-class DefaultCreateFilter implements ObjectManagerAwareInterface, QueryCreateFilterInterface
+class DefaultCreateFilter implements ObjectManagerAwareInterface, QueryCreateFilterInterface, ServiceLocatorAwareInterface
 {
+    /**
+     * @var ServiceLocatorInterface
+     */
+    protected $serviceLocator = null;
+
+    /**
+     * Set service locator
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+
+        return $this;
+    }
+
+    /**
+     * Get service locator
+     *
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator;
+    }
+
     /**
      * @var ObjectManager
      */

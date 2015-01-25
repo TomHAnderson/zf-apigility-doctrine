@@ -10,9 +10,39 @@ use Zend\ServiceManager\AbstractPluginManager;
 use ZF\ApiProblem\ApiProblem;
 use ZF\Rest\ResourceEvent;
 use OAuth2\Request as OAuth2Request;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-class DefaultOdm implements QueryProviderInterface
+class DefaultOdm implements QueryProviderInterface, ServiceLocatorAwareInterface
 {
+    /**
+     * @var ServiceLocatorInterface
+     */
+    protected $serviceLocator = null;
+
+    /**
+     * Set service locator
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+
+        return $this;
+    }
+
+    /**
+     * Get service locator
+     *
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator;
+    }
+
     /**
      * @var ObjectManager
      */
