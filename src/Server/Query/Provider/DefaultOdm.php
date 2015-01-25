@@ -2,72 +2,14 @@
 
 namespace ZF\Apigility\Doctrine\Server\Query\Provider;
 
-use ZF\Apigility\Doctrine\Server\Query\Provider\QueryProviderInterface;
 use ZF\Apigility\Doctrine\Server\Paginator\Adapter\DoctrineOdmAdapter;
-use DoctrineModule\Persistence\ObjectManagerAwareInterface;
-use Doctrine\Common\Persistence\ObjectManager;
-use Zend\ServiceManager\AbstractPluginManager;
 use ZF\ApiProblem\ApiProblem;
 use ZF\Rest\ResourceEvent;
 use OAuth2\Request as OAuth2Request;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use ZF\OAuth2\Service\OAuth2Server;
 
-class DefaultOdm implements QueryProviderInterface, ServiceLocatorAwareInterface
+class DefaultOdm extends AbstractQueryProvider
 {
-    /**
-     * @var ServiceLocatorInterface
-     */
-    protected $serviceLocator = null;
-
-    /**
-     * Set service locator
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-
-        return $this;
-    }
-
-    /**
-     * Get service locator
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
-    }
-
-    /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
-
-    /**
-     * Set the object manager
-     *
-     * @param ObjectManager $objectManager
-     */
-    public function setObjectManager(ObjectManager $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
-
-    /**
-     * Get the object manager
-     *
-     * @return ObjectManager
-     */
-    public function getObjectManager()
-    {
-        return $this->objectManager;
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -106,25 +48,5 @@ class DefaultOdm implements QueryProviderInterface, ServiceLocatorAwareInterface
         $count = $queryBuilder->getQuery()->execute()->count();
 
         return $count;
-    }
-
-    /**
-     * Validate an OAuth2 request
-     *
-     * @param scope
-     * @return ApiProblem | bool
-     */
-    public function validateOAuth2($scope = null)
-    {
-        $server = $this->getServiceLocator()->getServiceLocator()->get('ZF\OAuth2\Service\OAuth2Server');
-        if ( ! $server->verifyResourceRequest(OAuth2Request::createFromGlobals(), $response = null, $scope = $scope)) {
-            $error = $server->getResponse();
-            $parameters = $error->getParameters();
-            $detail = isset($parameters['error_description']) ? $parameters['error_description']: $error->getStatusText();
-
-            return new ApiProblem($error->getStatusCode(), $detail);
-        }
-
-        return true;
     }
 }

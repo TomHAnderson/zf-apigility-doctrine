@@ -10,6 +10,7 @@ use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 use ZF\Apigility\Doctrine\Server\Collection\Query;
+use Exception;
 
 /**
  * Class AbstractDoctrineResourceFactory
@@ -207,7 +208,20 @@ class DoctrineResourceFactory implements AbstractFactoryInterface
         $createFilterManager = $serviceLocator->get('ZfApigilityDoctrineQueryCreateFilterManager');
         $filterManagerAlias = (isset($config['query_create_filter'])) ? $config['query_create_filter']: 'default';
 
-        return $createFilterManager->get($filterManagerAlias);
+        // Load the oAuth2 server
+        try {
+            $oAuth2Server = $this->serviceLocator->get('ZF\OAuth2\Service\OAuth2Server');
+        } catch (Exception $e) {
+            // If no oAuth2 server that's just fine.
+        }
+
+        $filterManager = $createFilterManager->get($filterManagerAlias);
+
+        // Set object manager for all query providers
+        $filterManager->setObjectManager($objectManager);
+        $filterManager->setOAuth2Server($oAuth2Server);
+
+        return $filterManager();
     }
 
 
@@ -228,7 +242,12 @@ class DoctrineResourceFactory implements AbstractFactoryInterface
         if (class_exists('\\Doctrine\\ORM\\EntityManager')
             && $objectManager instanceof \Doctrine\ORM\EntityManager
         ) {
+            try {
             $queryProviders['default'] = $queryManager->get('default_orm');
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+die('ok');
         } elseif (class_exists('\\Doctrine\\ODM\\MongoDB\\DocumentManager')
             && $objectManager instanceof \Doctrine\ODM\MongoDB\DocumentManager
         ) {
@@ -246,9 +265,20 @@ class DoctrineResourceFactory implements AbstractFactoryInterface
             }
         }
 
+        // Load the oAuth2 server
+        try {
+            $oAuth2Server = $serviceLocator->get('ZF\OAuth2\Service\OAuth2Server');
+        } catch (Exception $e) {
+            // If no oAuth2 server that's just fine.
+            die('no oauth2');
+        }
+
         // Set object manager for all query providers
         foreach ($queryProviders as $provider) {
             $provider->setObjectManager($objectManager);
+            if ($oAuth2Server) {
+                $provider->setOAuth2Server($oAuth2Server);
+            }
         }
 
         return $queryProviders;
